@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Interior Design | K.M. Thacker & Associates</title>
+  <link rel="stylesheet" href="officee.css" />
+  <style>
+    .gallery-container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 2rem;
+    }
+
+    .gallery-description {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 1.2rem;
+      color: #555;
+    }
+
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .image-grid img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .image-grid img:hover {
+      transform: scale(1.03);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">🏛️ K.M. Thacker & Associates</div>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="office.html#architecture">Architecture</a></li>
+        <li><a href="office.html#interior">Interior Design</a></li>
+        <li><a href="office.html#valuation">Valuation</a></li>
+        <li><a href="office.html#consultancy">Consultancy</a></li>
+        <li><a href="office.html#vastu">Vastu</a></li>
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="gallery-container">
+    <h2>Interior Design Projects</h2>
+    <p class="gallery-description">
+      Our interior design services focus on crafting functional yet beautiful spaces tailored to your lifestyle and preferences. From elegant living rooms to efficient commercial layouts, we create interiors that feel just right.
+    </p>
+    <div class="image-grid">
+      <img src="images/interior1.png" alt="Interior Design 1" />
+      <img src="images/interior2.png" alt="Interior Design 2" />
+      <img src="images/interior3.png" alt="Interior Design 3" />
+      <img src="images/interior4.png" alt="Interior Design 4" />
+      <img src="images/interior5.png" alt="Interior Design 5" />
+      <img src="images/interior6.png" alt="Interior Design 6" />
+      <img src="images/interior7.png" alt="Interior Design 7" />
+      <img src="images/interior8.png" alt="Interior Design 8" />
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 K.M. Thacker & Associates. All rights reserved.</p>
+  </footer>
+</body>
+</html>
