@@ -1,6 +1,4 @@
-// script.js
 
-// Slideshow
 let slideIndex = 0;
 const slides = document.getElementsByClassName("slide");
 
@@ -31,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.querySelector("form");
   if (form) {
     form.addEventListener("submit", function (e) {
-      e.preventDefault();
+      
 
       const name = form.elements["name"].value.trim();
       const email = form.elements["email"].value.trim();
