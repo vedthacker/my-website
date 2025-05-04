@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Contact Form Submission (basic validation & feedback)
   const form = document.querySelector("form");
   if (form) {
-    form.addEventListener("submit", function (e) {
+    
       
 
       const name = form.elements["name"].value.trim();
@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!name || !email || !message) {
         alert("Please fill out all fields.");
         return;
-      }
+      
 
       alert(`Thank you ${name}, we’ll get back to you shortly!`);
       form.reset();
