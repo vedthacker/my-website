@@ -26,22 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Contact Form Submission (basic validation & feedback)
-  const form = document.querySelector("form");
-  if (form) {
-    
-      
-
-      const name = form.elements["name"].value.trim();
-      const email = form.elements["email"].value.trim();
-      const message = form.elements["message"].value.trim();
-
-      if (!name || !email || !message) {
-        alert("Please fill out all fields.");
-        return;
-      
-
-      alert(`Thank you ${name}, we’ll get back to you shortly!`);
-      form.reset();
+  
     });
-  }
-});
+  
