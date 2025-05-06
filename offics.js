@@ -1,21 +1,31 @@
-
 let slideIndex = 0;
 const slides = document.getElementsByClassName("slide");
 
 function showSlides() {
+  
   for (let slide of slides) {
     slide.style.display = "none";
   }
+  
+  
   slideIndex++;
-  if (slideIndex > slides.length) { slideIndex = 1; }
+  
+  
+  if (slideIndex > slides.length) {
+    slideIndex = 1;
+  }
+  
+  
   slides[slideIndex - 1].style.display = "block";
-  setTimeout(showSlides, 4000); // Change every 4 seconds
+
+  
+  setTimeout(showSlides, 4000);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   showSlides();
 
-  // Smooth scroll for nav links
+  
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener("click", function (e) {
       e.preventDefault();
@@ -24,6 +34,8 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   });
+});
+
 
   
   
