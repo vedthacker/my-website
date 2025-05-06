@@ -25,7 +25,5 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Contact Form Submission (basic validation & feedback)
   
-    });
   
