@@ -99,12 +99,20 @@
 
         /* --- 3. INTRO OVERLAY --- */
         #intro-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            height: 100dvh;
             background-color: #000; z-index: 9999;
             display: flex; align-items: center; justify-content: center;
             transition: opacity 1s ease-out;
         }
-        #intro-video { width: 100%; height: 100%; object-fit: cover; filter: contrast(1.2) saturate(1.1); }
+        #intro-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center center;
+            filter: contrast(1.2) saturate(1.1);
+            background: #000;
+        }
         #skip-btn {
             position: absolute; bottom: 50px; right: 50px; left: auto;
             background: rgba(0, 0, 0, 0.8); border: 1px solid var(--neon-cyan);
@@ -281,10 +289,17 @@
             .cta-btn { padding: 7px 14px; font-size: 0.65rem; }
 
             #skip-btn {
-                right: 16px;
-                bottom: 16px;
+                right: max(16px, env(safe-area-inset-right));
+                bottom: max(16px, env(safe-area-inset-bottom));
                 padding: 10px 16px;
                 font-size: 0.8rem;
+            }
+            #intro-overlay {
+                height: 100vh;
+                height: 100dvh;
+            }
+            #intro-video {
+                object-fit: contain;
             }
 
             .hero {
@@ -346,6 +361,10 @@
             .video-box { height: 200px; }
             .wide-card .video-box { height: 210px; }
             .stat-num { font-size: 1.55rem; }
+            #skip-btn {
+                padding: 9px 12px;
+                font-size: 0.74rem;
+            }
         }
     </style>
 </head>
