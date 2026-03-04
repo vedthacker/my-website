@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Gallery | K.M. Thacker & Associates</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        /* --- THEME CONFIGURATION (SAME AS INDEX) --- */
+        :root {
+            --neon-cyan: #00FFFF;
+            --royal-purple: #2E004F;
+            --deep-bg: #050508;
+            --text-silver: #E0E0E0;
+            --accent-gold: #FFD700; 
+            --glass-panel: rgba(20, 20, 30, 0.95);
+            --glass-border: rgba(0, 255, 255, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--deep-bg);
+            color: var(--text-silver);
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* TYPOGRAPHY */
+        h1, h2, h3 { font-family: 'Rajdhani', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
+        .highlight { color: var(--neon-cyan); }
+        .gold { color: var(--accent-gold); }
+
+        /* --- BACKGROUND GRID --- */
+        .space-grid-bg {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1; overflow: hidden;
+            background: radial-gradient(circle at center, #1b0a2e 0%, #000 100%);
+        }
+        .moving-grid {
+            position: absolute; width: 200%; height: 200%; top: -50%; left: -50%;
+            background: 
+                linear-gradient(transparent 90%, rgba(0, 255, 255, 0.08) 50%),
+                linear-gradient(90deg, transparent 90%, rgba(138, 43, 226, 0.1) 50%);
+            background-size: 100px 100px;
+            transform: rotateX(60deg);
+            animation: moveGrid 15s linear infinite;
+        }
+        @keyframes moveGrid {
+            0% { transform: rotateX(60deg) translateY(0); }
+            100% { transform: rotateX(60deg) translateY(100px); }
+        }
+
+        /* --- NAV --- */
+        nav {
+            position: fixed; top: 0; width: 100%; padding: 15px 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 1000; background: rgba(5, 5, 10, 0.95);
+            backdrop-filter: blur(10px); border-bottom: 1px solid var(--glass-border);
+        }
+        .logo { font-size: 1.2rem; font-weight: 800; color: white; letter-spacing: 1px; text-decoration: none; }
+        .back-btn { 
+            padding: 8px 20px; border: 1px solid var(--neon-cyan); color: var(--neon-cyan); 
+            font-weight: 700; text-transform: uppercase; font-size: 0.7rem; text-decoration: none; 
+            transition: 0.3s;
+        }
+        .back-btn:hover { background: var(--neon-cyan); color: black; box-shadow: 0 0 15px var(--neon-cyan); }
+
+        /* --- GALLERY HEADER --- */
+        .gallery-header {
+            padding-top: 120px; text-align: center; margin-bottom: 50px;
+        }
+        .gallery-header h1 { font-size: 3rem; color: white; text-shadow: 0 0 20px rgba(0,255,255,0.3); }
+        .gallery-header p { color: #888; margin-top: 10px; letter-spacing: 2px; }
+
+        /* --- GALLERY SECTIONS --- */
+        .gallery-section { padding: 40px 5%; margin-bottom: 60px; }
+        .section-title { 
+            font-size: 2rem; margin-bottom: 30px; padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.1); display: inline-block;
+        }
+        
+        /* GRID LAYOUT */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        /* PHOTO CARD */
+        .photo-card {
+            position: relative;
+            height: 250px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s ease;
+            background: #000;
+        }
+        .photo-card img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 0.5s ease;
+            opacity: 0.8;
+        }
+        
+        /* HOVER EFFECTS */
+        .photo-card:hover { 
+            border-color: var(--neon-cyan); 
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.2); 
+        }
+        .photo-card:hover img { transform: scale(1.1); opacity: 1; }
+
+        .overlay {
+            position: absolute; bottom: 0; left: 0; width: 100%;
+            background: linear-gradient(to top, black, transparent);
+            padding: 20px;
+            transform: translateY(100%);
+            transition: 0.3s;
+        }
+        .photo-card:hover .overlay { transform: translateY(0); }
+        .overlay h4 { font-size: 0.9rem; color: white; }
+
+        /* Specific Colors per section */
+        .ind-section .photo-card:hover { border-color: var(--accent-gold); box-shadow: 0 0 15px rgba(255, 215, 0, 0.2); }
+        .int-section .photo-card:hover { border-color: #ff00ff; box-shadow: 0 0 15px rgba(255, 0, 255, 0.2); }
+
+        /* --- LIGHTBOX MODAL --- */
+        #lightbox {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); z-index: 10000;
+            display: none; align-items: center; justify-content: center;
+            opacity: 0; transition: opacity 0.3s;
+        }
+        #lightbox.active { display: flex; opacity: 1; }
+        
+        #lightbox-img { 
+            max-width: 90%; max-height: 85vh; 
+            border: 2px solid var(--neon-cyan); 
+            box-shadow: 0 0 30px rgba(0,255,255,0.2);
+        }
+        
+        .close-lb {
+            position: absolute; top: 30px; right: 40px;
+            color: white; font-size: 2rem; cursor: pointer;
+            transition: 0.3s;
+        }
+        .close-lb:hover { color: var(--neon-cyan); transform: rotate(90deg); }
+        .lb-caption {
+            position: absolute; bottom: 30px; color: white; 
+            font-family: 'Rajdhani'; letter-spacing: 2px;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-wrap: wrap;
+                gap: 10px;
+                padding: 12px 4%;
+            }
+            .logo { font-size: 1rem; }
+            .back-btn { padding: 7px 12px; font-size: 0.62rem; }
+
+            .gallery-header {
+                padding-top: 110px;
+                margin-bottom: 26px;
+            }
+            .gallery-header h1 { font-size: 2.15rem; }
+            .gallery-header p { letter-spacing: 1px; font-size: 0.82rem; }
+
+            .gallery-section { padding: 30px 4%; margin-bottom: 34px; }
+            .section-title { font-size: 1.45rem; margin-bottom: 18px; }
+            .photo-grid { grid-template-columns: 1fr; gap: 14px; }
+            .photo-card { height: 220px; }
+
+            .overlay {
+                transform: translateY(0);
+                padding: 12px;
+                background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.15));
+            }
+            .overlay h4 { font-size: 0.78rem; }
+
+            #lightbox-img {
+                max-width: 94%;
+                max-height: 76vh;
+            }
+            .close-lb {
+                top: 16px;
+                right: 16px;
+                font-size: 1.5rem;
+            }
+            .lb-caption {
+                bottom: 18px;
+                font-size: 0.82rem;
+                letter-spacing: 1px;
+                text-align: center;
+                width: 90%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo { font-size: 0.9rem; }
+            .gallery-header h1 { font-size: 1.85rem; }
+            .photo-card { height: 200px; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="space-grid-bg">
+        <div class="moving-grid"></div>
+    </div>
+
+    <nav>
+        <a href="index.html?skipIntro=1" class="logo"><span>KM THACKER</span> & ASSOCIATES</a>
+        <a href="index.html?skipIntro=1" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Home</a>
+    </nav>
+
+    <div class="gallery-header">
+        <h1>PROJECT <span class="highlight">ARCHIVES</span></h1>
+        <p>EXPLORING THE DIMENSIONS OF DESIGN</p>
+    </div>
+
+    <section class="gallery-section ind-section">
+        <h2 class="section-title"><span class="gold">INDUSTRIAL</span> STRUCTURES</h2>
+        <div class="photo-grid" id="grid-industrial">
+            </div>
+    </section>
+
+    <section class="gallery-section">
+        <h2 class="section-title"><span class="highlight">ARCHITECTURAL</span> DESIGN</h2>
+        <div class="photo-grid" id="grid-architecture">
+             </div>
+    </section>
+
+    <section class="gallery-section int-section">
+        <h2 class="section-title" style="color:#ff00ff;">INTERIOR <span style="color:white;">SPACES</span></h2>
+        <div class="photo-grid" id="grid-interior">
+             </div>
+    </section>
+
+    <div id="lightbox" onclick="closeLightbox(event)">
+        <i class="fas fa-times close-lb" onclick="forceClose()"></i>
+        <img id="lightbox-img" src="" alt="Detailed View">
+        <div class="lb-caption" id="lb-caption">PROJECT DETAILS</div>
+    </div>
+
+    <script>
+        /* IMAGE CONFIGURATION
+           Extensions are mixed in this project (.png/.jpg/.jpeg),
+           so use a per-image extension map and skip only missing files.
+        */
+        const imageExtByNumber = {
+            1: "png", 2: "png", 3: "png", 4: "jpeg", 5: "png",
+            6: "jpeg", 7: "png", 8: "png", 9: "jpeg", 10: "jpeg",
+            11: "png", 12: "png", 13: "png", 14: "png", 15: "png",
+            16: "png", 17: "png", 18: "png", 19: "jpeg", 20: "png",
+            21: "png", 22: "png", 23: "png", 24: "png", 25: "png",
+            26: "png", 27: "png", 28: "png", 29: "png", 30: "jpg",
+            31: "jpeg", 32: "jpg", 34: "jpg", 35: "jpg", 36: "jpg",
+            37: "jpg", 38: "jpg", 41: "png", 42: "png", 43: "png",
+            44: "png", 45: "png", 46: "png", 47: "png", 48: "png",
+            49: "jpg", 50: "jpg", 51: "jpg", 52: "jpg", 53: "jpg",
+            54: "jpg", 55: "jpg", 56: "jpg", 57: "jpg", 58: "png",
+            59: "jpg", 60: "jpg"
+        };
+
+        function buildImageRange(start, end, titlePrefix) {
+            const images = [];
+            for (let i = start; i <= end; i++) {
+                const ext = imageExtByNumber[i];
+                if (!ext) continue; // Skip missing files (e.g. image33, image39, image40)
+                images.push({
+                    src: `image${i}.${ext}`,
+                    title: `${titlePrefix} ${i}`
+                });
+            }
+            return images;
+        }
+
+        const industrialImages = buildImageRange(1, 20, "Industrial Project");
+        const architectureImages = buildImageRange(21, 40, "Architectural Project");
+        const interiorImages = buildImageRange(41, 60, "Interior Design");
+
+        // FUNCTION TO RENDER GRID
+        function renderGrid(containerId, images) {
+            const container = document.getElementById(containerId);
+            images.forEach(imgData => {
+                const card = document.createElement('div');
+                card.className = 'photo-card';
+                // Pass onclick to open lightbox
+                card.onclick = () => openLightbox(imgData.src, imgData.title);
+                
+                card.innerHTML = `
+                    <img src="${imgData.src}" alt="${imgData.title}" loading="lazy" onerror="this.src='https://via.placeholder.com/600x400?text=Image+Not+Found'">
+                    <div class="overlay">
+                        <h4>${imgData.title}</h4>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // RENDER SECTIONS
+        renderGrid('grid-industrial', industrialImages);
+        renderGrid('grid-architecture', architectureImages);
+        renderGrid('grid-interior', interiorImages);
+
+        // LIGHTBOX LOGIC
+        const lightbox = document.getElementById('lightbox');
+        const lbImg = document.getElementById('lightbox-img');
+        const lbCap = document.getElementById('lb-caption');
+
+        function openLightbox(src, title) {
+            lbImg.src = src;
+            lbCap.innerText = title;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox(e) {
+            if (e.target !== lbImg && e.target !== lbCap) {
+                forceClose();
+            }
+        }
+        
+        function forceClose() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+    </script>
+</body>
+</html>

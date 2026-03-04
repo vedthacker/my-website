@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K.M. Thacker & Associates | Architects & Engineers</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        /* --- 1. THEME CONFIGURATION --- */
+        :root {
+            --neon-cyan: #00FFFF;
+            --royal-purple: #2E004F;
+            --deep-bg: #050508;
+            --text-silver: #E0E0E0;
+            --accent-gold: #FFD700; 
+            --glass-panel: rgba(20, 20, 30, 0.95);
+            --glass-border: rgba(0, 255, 255, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--deep-bg);
+            color: var(--text-silver);
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            overflow-y: hidden; /* Locked for intro */
+        }
+        body.active-site { overflow-y: auto; }
+
+        /* TYPOGRAPHY */
+        h1, h2, h3, h4 { font-family: 'Rajdhani', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
+        .highlight { color: var(--neon-cyan); }
+        .gold { color: var(--accent-gold); }
+        .section-header { text-align: center; margin-bottom: 50px; }
+        .section-header h2 { font-size: 2.5rem; color: white; margin-bottom: 10px; }
+        .section-header p { color: #888; max-width: 600px; margin: 0 auto; }
+
+        /* --- 2. NEW BACKGROUND IMPLEMENTATION --- */
+        .space-grid-bg {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -2; overflow: hidden;
+            
+            /* YOUR IMAGE GOES HERE */
+            background-image: url('bg.png');
+            background-size: cover;
+            background-position: center;
+            
+            /* Darken image so text remains visible */
+            filter: brightness(0.3);
+        }
+
+        .moving-grid {
+            position: fixed; width: 200%; height: 200%; top: -50%; left: -50%;
+            z-index: -1;
+            /* Subtle grid overlay on top of the image */
+            background: 
+                linear-gradient(transparent 90%, rgba(0, 255, 255, 0.05) 50%),
+                linear-gradient(90deg, transparent 90%, rgba(138, 43, 226, 0.05) 50%);
+            background-size: 100px 100px;
+            transform: rotateX(60deg);
+            animation: moveGrid 20s linear infinite;
+        }
+
+        .holo-layer {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            transform-style: preserve-3d;
+            z-index: -1;
+        }
+        
+        .holo-icon {
+            position: absolute;
+            color: rgba(0, 255, 255, 0.1);
+            font-size: 8rem; 
+            animation: floatSpace 20s linear infinite;
+        }
+
+        .h-house { top: 20%; left: 10%; animation-delay: 0s; }
+        .h-industry { top: 50%; right: 15%; animation-delay: -5s; }
+        .h-compass { top: 80%; left: 20%; animation-delay: -10s; }
+        .h-building { top: 10%; right: 30%; animation-delay: -15s; }
+
+        @keyframes moveGrid {
+            0% { transform: rotateX(60deg) translateY(0); }
+            100% { transform: rotateX(60deg) translateY(100px); }
+        }
+
+        @keyframes floatSpace {
+            0% { transform: scale(0.5) translateY(0) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.2; }
+            80% { opacity: 0.2; }
+            100% { transform: scale(1.5) translateY(100px) rotate(10deg); opacity: 0; }
+        }
+
+        /* --- 3. INTRO OVERLAY --- */
+        #intro-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #000; z-index: 9999;
+            display: flex; align-items: center; justify-content: center;
+            transition: opacity 1s ease-out;
+        }
+        #intro-video { width: 100%; height: 100%; object-fit: cover; filter: contrast(1.2) saturate(1.1); }
+        #skip-btn {
+            position: absolute; bottom: 50px; right: 50px; left: auto;
+            background: rgba(0, 0, 0, 0.8); border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan); padding: 12px 30px; cursor: pointer;
+            font-family: 'Rajdhani', sans-serif; text-transform: uppercase; font-weight: 700;
+            z-index: 10005;
+        }
+
+        /* --- 4. NAV & HERO --- */
+        nav {
+            position: fixed; top: 0; width: 100%; padding: 15px 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 1000; background: rgba(5, 5, 10, 0.8); /* Slightly more transparent */
+            backdrop-filter: blur(10px); border-bottom: 1px solid var(--glass-border);
+        }
+        .logo { font-size: 1.2rem; font-weight: 800; color: white; letter-spacing: 1px; }
+        .nav-links { display: flex; gap: 20px; }
+        .nav-links a { font-size: 0.75rem; font-weight: 600; color: #ccc; text-decoration: none; text-transform: uppercase; }
+        .gallery-btn { border-bottom: 2px solid var(--neon-cyan); color: white !important; }
+        .cta-btn { padding: 8px 20px; border: 1px solid var(--neon-cyan); color: var(--neon-cyan); font-weight: 700; text-transform: uppercase; font-size: 0.7rem; text-decoration: none; }
+        
+        .hero {
+            min-height: 85vh; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; padding-top: 80px;
+        }
+        .hero h1 {
+            font-size: 4rem; line-height: 1.1; margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+            color: white;
+            font-weight: 800;
+        }
+        
+        .hero-stats {
+            display: flex; gap: 40px; margin-top: 20px; margin-bottom: 30px;
+            padding: 15px 30px; background: var(--glass-panel); border-radius: 50px; border: 1px solid rgba(255,255,255,0.1);
+        }
+        .stat-num { font-size: 1.8rem; font-weight: 700; color: white; display: block; font-family: 'Rajdhani'; }
+        .stat-label { font-size: 0.7rem; color: #888; text-transform: uppercase; }
+
+        /* --- 5. MARQUEE --- */
+        .marquee-section {
+            width: 100%; padding: 20px 0;
+            background: rgba(255,255,255,0.03); border-top: 1px solid rgba(255,255,255,0.1); border-bottom: 1px solid rgba(255,255,255,0.1);
+            overflow: hidden; margin-bottom: 60px;
+        }
+        .marquee-title { text-align: center; color: var(--neon-cyan); font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 15px; opacity: 0.8; }
+        .marquee-container { white-space: nowrap; position: relative; }
+        .marquee-content { display: inline-block; animation: scroll 35s linear infinite; }
+        .marquee-container:hover .marquee-content { animation-play-state: paused; }
+        
+        .client-logo-box {
+            display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
+            width: 180px; height: 90px; margin: 0 20px; vertical-align: middle;
+            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 5px;
+            padding: 5px;
+        }
+        .client-name { color: white; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; font-family: 'Rajdhani'; }
+        
+        /* New Logo Styles */
+        .client-logo {
+            max-width: 120px;
+            max-height: 40px;
+            object-fit: contain;
+            margin-bottom: 5px;
+            background: #fff;
+            border-radius: 3px;
+            padding: 2px 4px;
+        }
+        
+        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* --- 6. VIDEO CARD STYLES --- */
+        .dual-container { 
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: center; 
+            gap: 40px; 
+            margin: 40px 0; 
+        }
+        
+        .viewer-card { 
+            background: var(--glass-panel); 
+            border: 1px solid var(--glass-border); 
+            padding: 15px; 
+            border-radius: 10px; 
+            width: 450px; 
+            max-width: 100%; 
+            perspective: 1000px;
+        }
+
+        .viewer-card.wide-card {
+            flex-basis: 100%;     
+            max-width: 940px;    
+        }
+        
+        .video-box { 
+            width: 100%; 
+            height: 300px; 
+            background: rgba(0,0,0,0.5); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            overflow: hidden; 
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.1s ease-out; 
+            transform-style: preserve-3d;
+        }
+
+        .wide-card .video-box {
+            height: 400px;
+        }
+        
+        .video-box video { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            opacity: 0.9; 
+            transition: opacity 0.3s; 
+        }
+        .video-box:hover video { opacity: 1; }
+
+        /* --- 7. GRIDS --- */
+        .grid-section { padding: 80px 5%; background: rgba(0,0,0,0.2); text-align: center; }
+        .category-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;
+            max-width: 1200px; margin: 0 auto;
+        }
+        .category-card {
+            background: var(--glass-panel); border: 1px solid rgba(255,255,255,0.1);
+            padding: 30px 20px; text-align: center; transition: 0.3s; position: relative; overflow: hidden;
+        }
+        .category-card:hover { transform: translateY(-5px); border-color: var(--neon-cyan); background: rgba(0,255,255,0.05); }
+        .category-card i { font-size: 2.5rem; color: var(--neon-cyan); margin-bottom: 15px; }
+        .category-card h3 { color: white; font-size: 1rem; margin-bottom: 5px; }
+        .category-card p { font-size: 0.8rem; color: #888; }
+
+        /* BUTTONS */
+        .section-footer { margin-top: 50px; }
+        .detail-btn {
+            padding: 15px 40px; background: transparent; border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan); font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
+            text-decoration: none; display: inline-block; transition: 0.3s; font-size: 0.8rem;
+        }
+        .detail-btn:hover { background: var(--neon-cyan); color: black; box-shadow: 0 0 30px rgba(0,255,255,0.3); }
+        .gold-btn { border-color: var(--accent-gold); color: var(--accent-gold); }
+        .gold-btn:hover { background: var(--accent-gold); color: black; box-shadow: 0 0 30px rgba(255,215,0,0.3); }
+
+        /* --- 8. SECTIONS --- */
+        .residential-section { padding: 80px 5%; background: linear-gradient(to bottom, #050508, #111); text-align: center; }
+        .valuation-section { padding: 80px 5%; background: linear-gradient(to bottom, #1a0b00, #000); text-align: center; }
+        .val-badge { background: var(--accent-gold); color: black; font-weight: 800; padding: 5px 10px; font-size: 0.7rem; border-radius: 3px; display: inline-block; margin-bottom: 20px; }
+        .val-stats { display: flex; justify-content: center; gap: 50px; margin-bottom: 40px; flex-wrap: wrap; }
+        .val-stat-num { font-size: 2.5rem; color: white; font-weight: 800; font-family: 'Rajdhani'; }
+
+        /* FOOTER */
+        footer { background: #020205; padding: 60px 10%; border-top: 1px solid rgba(255,255,255,0.1); display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; }
+        .foot-col h4 { color: white; margin-bottom: 20px; } .foot-col p { color: #666; font-size: 0.9rem; margin-bottom: 10px; }
+
+        @media (max-width: 1024px) {
+            .hero h1 { font-size: 3.2rem; }
+            .viewer-card { width: min(100%, 640px); }
+            .wide-card .video-box { height: 320px; }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-wrap: wrap;
+                gap: 10px;
+                padding: 12px 4%;
+            }
+            .logo { font-size: 1rem; }
+            .nav-links { display: none; }
+            .cta-btn { padding: 7px 14px; font-size: 0.65rem; }
+
+            #skip-btn {
+                right: 16px;
+                bottom: 16px;
+                padding: 10px 16px;
+                font-size: 0.8rem;
+            }
+
+            .hero {
+                min-height: auto;
+                padding: 110px 5% 40px;
+            }
+            .hero h1 { font-size: 2.2rem; }
+            .hero-tagline { font-size: 0.75rem; letter-spacing: 2px !important; }
+            .hero-stats {
+                flex-direction: column;
+                gap: 12px;
+                width: 100%;
+                max-width: 360px;
+                border-radius: 16px;
+                padding: 14px 18px;
+            }
+
+            .marquee-section { margin-bottom: 36px; }
+            .client-logo-box {
+                width: 138px;
+                height: 76px;
+                margin: 0 10px;
+            }
+            .client-logo {
+                max-width: 96px;
+                max-height: 30px;
+            }
+            .client-name { font-size: 0.68rem; }
+
+            .dual-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 22px;
+                margin: 20px 0;
+                padding: 0 4%;
+            }
+            .viewer-card { padding: 12px; }
+            .video-box { height: 220px; }
+            .wide-card .video-box { height: 240px; }
+
+            .section-header { margin-bottom: 28px; }
+            .section-header h2 { font-size: 1.85rem; }
+            .grid-section, .residential-section, .valuation-section { padding: 56px 4%; }
+            .category-grid { grid-template-columns: 1fr; gap: 14px; }
+            .detail-btn { width: 100%; max-width: 320px; padding: 14px 18px; }
+            .val-stat-num { font-size: 2rem; }
+
+            footer {
+                padding: 40px 6%;
+                gap: 22px;
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo { font-size: 0.9rem; letter-spacing: 0.5px; }
+            .hero h1 { font-size: 1.82rem; }
+            .section-header h2 { font-size: 1.6rem; }
+            .video-box { height: 200px; }
+            .wide-card .video-box { height: 210px; }
+            .stat-num { font-size: 1.55rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="space-grid-bg"></div>
+    <div class="moving-grid"></div>
+
+    <div class="holo-layer">
+        <i class="fas fa-city holo-icon h-building"></i>
+        <i class="fas fa-industry holo-icon h-industry"></i>
+        <i class="fas fa-home holo-icon h-house"></i>
+        <i class="fas fa-drafting-compass holo-icon h-compass"></i>
+    </div>
+
+    <div id="intro-overlay">
+        <video id="intro-video" muted playsinline autoplay><source src="intro1.mp4" type="video/mp4"></video>
+        <button id="skip-btn" onclick="endIntro()">Skip Intro</button>
+    </div>
+
+    <div id="main-site" style="opacity:0; visibility:hidden; transition:opacity 1.5s;">
+        
+        <nav>
+            <div class="logo"><span>KM THACKER</span> & ASSOCIATES</div>
+            <div class="nav-links">
+                <a href="#industrial">Industrial</a>
+                <a href="#residential">Architecture</a>
+                <a href="#valuation">Valuation</a>
+                <a href="gallery.html" class="gallery-btn">Photo Gallery</a>
+            </div>
+            <a href="enquire.html" class="cta-btn">Enquire</a>
+        </nav>
+
+        <section class="hero">
+            <p class="hero-tagline" style="color:var(--neon-cyan); letter-spacing:3px;">ISO 9001:2015 CERTIFIED</p>
+            <h1>
+                <span>ENGINEERING PRECISION.</span>
+                <span style="color:var(--neon-cyan);">ARCHITECTURAL VISION.</span>
+            </h1>
+            
+            <div class="hero-stats">
+                <div class="stat-box"><span class="stat-num">30+</span><span class="stat-label">Years Exp.</span></div>
+                <div class="stat-box"><span class="stat-num">1000+</span><span class="stat-label">Projects</span></div>
+            </div>
+        </section>
+
+        <div class="marquee-section">
+            <div class="marquee-title">Trusted By Industry Leaders</div>
+            <div class="marquee-container">
+                <div class="marquee-content">
+                    <div class="client-logo-box"><img src="https://logo.clearbit.com/jmbaxi.com" onerror="this.onerror=null;this.src='https://www.google.com/s2/favicons?sz=128&domain='+this.src.split('/').pop();this.style.filter='none';" class="client-logo" alt="J M Baxi logo" loading="lazy" referrerpolicy="no-referrer"><span class="client-name">J M BAXI</span></div>
+                    <div class="client-logo-box"><img src="https://logo.clearbit.com/friendsgroupindia.com" onerror="this.onerror=null;this.src='https://www.google.com/s2/favicons?sz=128&domain='+this.src.split('/').pop();this.style.filter='none';" class="client-logo" alt="Friends Impex logo" loading="lazy" referrerpolicy="no-referrer"><span class="client-name">FRIENDS IMPEX</span></div>
+                    <div class="client-logo-box"><img src="https://logo.clearbit.com/modernsalt.in" onerror="this.onerror=null;this.src='https://www.google.com/s2/favicons?sz=128&domain='+this.src.split('/').pop();this.style.filter='none';" class="client-logo" alt="Modern Salt logo" loading="lazy" referrerpolicy="no-referrer"><span class="client-name">MODERN SALT</span></div>
+                    <div class="client-logo-box"><img src="https://logo.clearbit.com/punjabriceland.com" onerror="this.onerror=null;this.src='https://www.google.com/s2/favicons?sz=128&domain='+this.src.split('/').pop();this.style.filter='none';" class="client-logo" alt="Punjab Rice logo" loading="lazy" referrerpolicy="no-referrer"><span class="client-name">PUNJAB RICE</span></div>
+                    <div class="client-logo-box"><img src="https://logo.clearbit.com/shreeyampower.com" onerror="this.onerror=null;this.src='https://www.google.com/s2/favicons?sz=128&domain='+this.src.split('/').pop();this.style.filter='none';" class="client-logo" alt="Shreeyam Power logo" loading="lazy" referrerpolicy="no-referrer"><span class="client-name">SHREEYAM POWER</span></div>
+                    <div class="client-logo-box"><img src="https://logo.clearbit.com/rishishipping.com" onerror="this.onerror=null;this.src='https://www.google.com/s2/favicons?sz=128&domain='+this.src.split('/').pop();this.style.filter='none';" class="client-logo" alt="Rishi Shipping logo" loading="lazy" referrerpolicy="no-referrer"><span class="client-name">RISHI SHIPPING</span></div>
+                    <div class="client-logo-box"><img src="https://logo.clearbit.com/midindia.com" onerror="this.onerror=null;this.src='https://www.google.com/s2/favicons?sz=128&domain='+this.src.split('/').pop();this.style.filter='none';" class="client-logo" alt="Mid India logo" loading="lazy" referrerpolicy="no-referrer"><span class="client-name">MID INDIA</span></div>
+                    <div class="client-logo-box"><img src="https://logo.clearbit.com/jmbaxi.com" onerror="this.onerror=null;this.src='https://www.google.com/s2/favicons?sz=128&domain='+this.src.split('/').pop();this.style.filter='none';" class="client-logo" alt="J M Baxi logo" loading="lazy" referrerpolicy="no-referrer"><span class="client-name">J M BAXI</span></div>
+                    <div class="client-logo-box"><img src="https://logo.clearbit.com/friendsgroupindia.com" onerror="this.onerror=null;this.src='https://www.google.com/s2/favicons?sz=128&domain='+this.src.split('/').pop();this.style.filter='none';" class="client-logo" alt="Friends Impex logo" loading="lazy" referrerpolicy="no-referrer"><span class="client-name">FRIENDS IMPEX</span></div>
+                    <div class="client-logo-box"><img src="https://logo.clearbit.com/modernsalt.in" onerror="this.onerror=null;this.src='https://www.google.com/s2/favicons?sz=128&domain='+this.src.split('/').pop();this.style.filter='none';" class="client-logo" alt="Modern Salt logo" loading="lazy" referrerpolicy="no-referrer"><span class="client-name">MODERN SALT</span></div>
+                    <div class="client-logo-box"><img src="https://logo.clearbit.com/punjabriceland.com" onerror="this.onerror=null;this.src='https://www.google.com/s2/favicons?sz=128&domain='+this.src.split('/').pop();this.style.filter='none';" class="client-logo" alt="Punjab Rice logo" loading="lazy" referrerpolicy="no-referrer"><span class="client-name">PUNJAB RICE</span></div>
+                    <div class="client-logo-box"><img src="https://logo.clearbit.com/shreeyampower.com" onerror="this.onerror=null;this.src='https://www.google.com/s2/favicons?sz=128&domain='+this.src.split('/').pop();this.style.filter='none';" class="client-logo" alt="Shreeyam Power logo" loading="lazy" referrerpolicy="no-referrer"><span class="client-name">SHREEYAM POWER</span></div>
+                    <div class="client-logo-box"><img src="https://logo.clearbit.com/rishishipping.com" onerror="this.onerror=null;this.src='https://www.google.com/s2/favicons?sz=128&domain='+this.src.split('/').pop();this.style.filter='none';" class="client-logo" alt="Rishi Shipping logo" loading="lazy" referrerpolicy="no-referrer"><span class="client-name">RISHI SHIPPING</span></div>
+                    <div class="client-logo-box"><img src="https://logo.clearbit.com/midindia.com" onerror="this.onerror=null;this.src='https://www.google.com/s2/favicons?sz=128&domain='+this.src.split('/').pop();this.style.filter='none';" class="client-logo" alt="Mid India logo" loading="lazy" referrerpolicy="no-referrer"><span class="client-name">MID INDIA</span></div>
+                </div>
+            </div>
+            <div style="text-align:center; margin-top:10px;">
+                <span style="font-size:0.75rem; color:#aaa; background:rgba(46,0,79,0.5); padding:4px 12px; border-radius:10px;">
+                    Also on Govt. Panel: GSRTC & NBCC (Kandla SEZ)
+                </span>
+            </div>
+        </div>
+
+        <section class="dual-container">
+            
+            <div class="viewer-card">
+                <div style="color:white; margin-bottom:10px;">RESIDENTIAL <i class="fas fa-home highlight" style="float:right;"></i></div>
+                <div class="video-box tilt-target">
+                    <video id="vid-res" muted playsinline autoplay></video>
+                </div>
+                <p style="text-align:center; font-size:0.7rem; color:#666; margin-top:10px;">
+                    <i class="fas fa-play-circle"></i> ARCHITECTURAL WALKTHROUGH
+                </p>
+            </div>
+
+            <div class="viewer-card" style="border-color:rgba(255,215,0,0.3);">
+                <div style="color:white; margin-bottom:10px;">
+                    INDUSTRIAL <i class="fas fa-warehouse gold" style="float:right;"></i>
+                </div>
+                <div class="video-box tilt-target" style="border-color:rgba(255,215,0,0.2);">
+                    <video id="vid-ind" muted playsinline autoplay></video>
+                </div>
+                <p style="text-align:center; font-size:0.7rem; color:#666; margin-top:10px;">
+                    <i class="fas fa-play-circle"></i> STRUCTURAL MODEL
+                </p>
+            </div>
+
+            <div class="viewer-card wide-card" style="border-color:rgba(0, 255, 255, 0.3);">
+                <div style="color:white; margin-bottom:10px;">
+                    GOVT. INFRASTRUCTURE <i class="fas fa-bus" style="float:right; color:var(--neon-cyan);"></i>
+                </div>
+                <div class="video-box tilt-target" style="border-color:rgba(0, 255, 255, 0.2);">
+                    <video id="vid-bus" muted playsinline autoplay></video>
+                </div>
+                <p style="text-align:center; font-size:0.7rem; color:#666; margin-top:10px;">
+                    <i class="fas fa-play-circle"></i> COMMERCIAL & PUBLIC TRANSPORT
+                </p>
+            </div>
+
+            <div class="viewer-card wide-card" style="border-color:rgba(255, 100, 255, 0.3);">
+                <div style="color:white; margin-bottom:10px;">
+                    COMMERCIAL <i class="fas fa-building" style="float:right; color:#ff64ff;"></i>
+                </div>
+                <div class="video-box tilt-target" style="border-color:rgba(255, 100, 255, 0.2);">
+                    <video id="vid-com" muted playsinline autoplay></video>
+                </div>
+                <p style="text-align:center; font-size:0.7rem; color:#666; margin-top:10px;">
+                    <i class="fas fa-play-circle"></i> COMMERCIAL COMPLEX
+                </p>
+            </div>
+
+        </section>
+
+        <section id="industrial" class="grid-section">
+            <div class="section-header">
+                <h2><span class="highlight">INDUSTRIAL</span> INFRASTRUCTURE</h2>
+                <p>Specialized structural design for heavy industries and logistics.</p>
+            </div>
+            <div class="category-grid">
+                <div class="category-card"><i class="fas fa-warehouse"></i><h3>Godown & Warehouse</h3><p>Large span storage</p></div>
+                <div class="category-card"><i class="fas fa-seedling"></i><h3>Rice Sortex Plants</h3><p>Processing units</p></div>
+                <div class="category-card"><i class="fas fa-truck-loading"></i><h3>Logistic Plants</h3><p>Transport hubs</p></div>
+                <div class="category-card"><i class="fas fa-oil-can"></i><h3>Oil Refineries</h3><p>Edible oil processing</p></div>
+                <div class="category-card"><i class="fas fa-flask"></i><h3>Bromine Plant</h3><p>Chemical design</p></div>
+                <div class="category-card"><i class="fas fa-leaf"></i><h3>Lentil Pulse Mill</h3><p>Food grade units</p></div>
+                <div class="category-card"><i class="fas fa-industry"></i><h3>Steel Plant</h3><p>Heavy steel structures</p></div>
+                <div class="category-card"><i class="fas fa-layer-group"></i><h3>Plywood Industries</h3><p>Manufacturing</p></div>
+            </div>
+            <div class="section-footer">
+                <a href="industrial.html" class="detail-btn">View Detailed Portfolio</a>
+            </div>
+        </section>
+
+        <section id="residential" class="residential-section">
+            <div class="section-header">
+                <h2>ARCHITECTURE & <span class="highlight">HOSPITALITY</span></h2>
+                <p>Designing urban spaces, hospitals, and luxury interiors.</p>
+            </div>
+            <div class="category-grid">
+                <div class="category-card"><i class="fas fa-city"></i><h3>Urban Residence</h3><p>Townships & Villas</p></div>
+                <div class="category-card"><i class="fas fa-couch"></i><h3>Interior Design</h3><p>Luxury & Corporate</p></div>
+                <div class="category-card"><i class="fas fa-hotel"></i><h3>Hotels & Resorts</h3><p>Hospitality Infrastructure</p></div>
+                <div class="category-card"><i class="fas fa-hospital"></i><h3>Hospitals</h3><p>Medical Infrastructure</p></div>
+            </div>
+            <div class="section-footer">
+                <a href="architecture.html" class="detail-btn">View Detailed Portfolio</a>
+            </div>
+        </section>
+
+        <section id="valuation" class="valuation-section">
+            <span class="val-badge">GOVT. APPROVED VALUERS</span>
+            <h2 style="color:white; font-size:2.5rem; margin-bottom:10px;">ASSET <span class="gold">VALUATION</span></h2>
+            
+            <div class="val-stats">
+                <div><span class="val-stat-num">500+</span><span style="color:gold;">PROJECTS</span></div>
+                <div><span class="val-stat-num">20+</span><span style="color:gold;">BANKS</span></div>
+            </div>
+
+            <div style="display:flex; justify-content:center; gap:20px; flex-wrap:wrap; margin-bottom:40px;">
+                <div style="border:1px solid gold; padding:20px; width:300px; background:rgba(255,215,0,0.05);">
+                    <h3 style="color:gold;">Real Estate</h3><p style="color:#aaa; font-size:0.8rem;">Land & Building Valuation</p>
+                </div>
+                <div style="border:1px solid gold; padding:20px; width:300px; background:rgba(255,215,0,0.05);">
+                    <h3 style="color:gold;">Plant & Machinery</h3><p style="color:#aaa; font-size:0.8rem;">Industrial Asset Valuation</p>
+                </div>
+            </div>
+            
+            <div class="section-footer">
+                <a href="valuation.html" class="detail-btn gold-btn">View Detailed Portfolio</a>
+            </div>
+
+            <div class="marquee-section" style="background:transparent; border-color:rgba(255,215,0,0.2); margin-top:60px;">
+                <div class="marquee-title" style="color:gold;">Empanelled Banks</div>
+                <div class="marquee-container">
+                    <div class="marquee-content">
+                        <div class="client-logo-box" style="border-color:rgba(255,215,0,0.3);"><img src="https://upload.wikimedia.org/wikipedia/commons/c/cc/SBI-logo.svg" class="client-logo"><span class="client-name gold">SBI</span></div>
+                        <div class="client-logo-box" style="border-color:rgba(255,215,0,0.3);"><img src="https://upload.wikimedia.org/wikipedia/commons/2/28/HDFC_Bank_Logo.svg" class="client-logo"><span class="client-name gold">HDFC</span></div>
+                        <div class="client-logo-box" style="border-color:rgba(255,215,0,0.3);"><img src="https://upload.wikimedia.org/wikipedia/en/8/88/Punjab_and_Sind_Bank_Logo.svg" class="client-logo"><span class="client-name gold">PUNJAB & SINDH</span></div>
+                        <div class="client-logo-box" style="border-color:rgba(255,215,0,0.3);"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Kotak_Mahindra_Bank_logo.svg" class="client-logo"><span class="client-name gold">KOTAK</span></div>
+                        <div class="client-logo-box" style="border-color:rgba(255,215,0,0.3);"><img src="https://upload.wikimedia.org/wikipedia/commons/1/1a/Axis_Bank_logo.svg" class="client-logo"><span class="client-name gold">AXIS FINANCE</span></div>
+                        <div class="client-logo-box" style="border-color:rgba(255,215,0,0.3);"><img src="https://upload.wikimedia.org/wikipedia/en/7/77/Karur_Vysya_Bank_Logo.svg" class="client-logo"><span class="client-name gold">KARUR VYASA</span></div>
+                        <div class="client-logo-box" style="border-color:rgba(255,215,0,0.3);"><img src="https://upload.wikimedia.org/wikipedia/en/2/22/Aditya_Birla_Group_Logo.svg" class="client-logo"><span class="client-name gold">ADITYA BIRLA</span></div>
+                        <div class="client-logo-box" style="border-color:rgba(255,215,0,0.3);"><img src="https://upload.wikimedia.org/wikipedia/commons/8/87/Bandhan_Bank_Logo.svg" class="client-logo"><span class="client-name gold">BANDHAN BANK</span></div>
+                        <div class="client-logo-box" style="border-color:rgba(255,215,0,0.3);"><img src="https://logo.clearbit.com/gmcbank.in" onerror="this.onerror=null;this.src='https://www.google.com/s2/favicons?sz=128&domain='+this.src.split('/').pop();this.style.filter='none';" class="client-logo"><span class="client-name gold">GMCB</span></div>
+                        <div class="client-logo-box" style="border-color:rgba(255,215,0,0.3);"><img src="https://upload.wikimedia.org/wikipedia/commons/c/cc/SBI-logo.svg" class="client-logo"><span class="client-name gold">SBI</span></div>
+                        <div class="client-logo-box" style="border-color:rgba(255,215,0,0.3);"><img src="https://upload.wikimedia.org/wikipedia/commons/2/28/HDFC_Bank_Logo.svg" class="client-logo"><span class="client-name gold">HDFC</span></div>
+                        <div class="client-logo-box" style="border-color:rgba(255,215,0,0.3);"><img src="https://upload.wikimedia.org/wikipedia/en/8/88/Punjab_and_Sind_Bank_Logo.svg" class="client-logo"><span class="client-name gold">PUNJAB & SINDH</span></div>
+                        <div class="client-logo-box" style="border-color:rgba(255,215,0,0.3);"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Kotak_Mahindra_Bank_logo.svg" class="client-logo"><span class="client-name gold">KOTAK</span></div>
+                        <div class="client-logo-box" style="border-color:rgba(255,215,0,0.3);"><img src="https://upload.wikimedia.org/wikipedia/commons/1/1a/Axis_Bank_logo.svg" class="client-logo"><span class="client-name gold">AXIS FINANCE</span></div>
+                        <div class="client-logo-box" style="border-color:rgba(255,215,0,0.3);"><img src="https://upload.wikimedia.org/wikipedia/en/7/77/Karur_Vysya_Bank_Logo.svg" class="client-logo"><span class="client-name gold">KARUR VYASA</span></div>
+                        <div class="client-logo-box" style="border-color:rgba(255,215,0,0.3);"><img src="https://upload.wikimedia.org/wikipedia/en/2/22/Aditya_Birla_Group_Logo.svg" class="client-logo"><span class="client-name gold">ADITYA BIRLA</span></div>
+                        <div class="client-logo-box" style="border-color:rgba(255,215,0,0.3);"><img src="https://upload.wikimedia.org/wikipedia/commons/8/87/Bandhan_Bank_Logo.svg" class="client-logo"><span class="client-name gold">BANDHAN BANK</span></div>
+                        <div class="client-logo-box" style="border-color:rgba(255,215,0,0.3);"><img src="https://logo.clearbit.com/gmcbank.in" onerror="this.onerror=null;this.src='https://www.google.com/s2/favicons?sz=128&domain='+this.src.split('/').pop();this.style.filter='none';" class="client-logo"><span class="client-name gold">GMCB</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer id="contact">
+            <div class="foot-col">
+                <div class="logo" style="margin-bottom: 20px;"><span>KM THACKER</span> & ASSOCIATES</div>
+                <p>Plot No 173, Ward 12 B, Gandhidham, Gujarat - 370201</p>
+                <p>+91 98252 25738</p>
+                <p>kamlesh_thacker@yahoo.com<br>kmt.valuer@gmail.com</p>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        /* INTRO */
+        function showMainSiteDirectly() {
+            const introOverlay = document.getElementById('intro-overlay');
+            const introVideo = document.getElementById('intro-video');
+            const mainSite = document.getElementById('main-site');
+
+            if (introVideo) {
+                introVideo.pause();
+            }
+            if (introOverlay) {
+                introOverlay.style.display = 'none';
+            }
+            if (mainSite) {
+                mainSite.style.opacity = '1';
+                mainSite.style.visibility = 'visible';
+            }
+            document.body.classList.add('active-site');
+        }
+
+        function endIntro() {
+            document.getElementById('intro-overlay').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('intro-overlay').style.display = 'none';
+                document.getElementById('main-site').style.opacity = '1';
+                document.getElementById('main-site').style.visibility = 'visible';
+                document.body.classList.add('active-site');
+            }, 1000);
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const forceSkipIntro = urlParams.get('skipIntro') === '1';
+        const navEntry = performance.getEntriesByType('navigation')[0];
+        const isReload = navEntry && navEntry.type === 'reload';
+        let fromSameOrigin = false;
+
+        if (document.referrer) {
+            try {
+                fromSameOrigin = new URL(document.referrer).origin === window.location.origin;
+            } catch (e) {
+                fromSameOrigin = false;
+            }
+        }
+
+        // Skip intro when user returns from another page of this website.
+        if (forceSkipIntro || (fromSameOrigin && !isReload)) {
+            showMainSiteDirectly();
+            if (forceSkipIntro) {
+                window.history.replaceState({}, '', window.location.pathname);
+            }
+        }
+
+        document.getElementById('intro-video').onended = function() {
+            if (!document.body.classList.contains('active-site')) {
+                endIntro();
+            }
+        };
+        setTimeout(() => { /* endIntro(); */ }, 8000);
+
+        /* --- VIDEO SEQUENCE LOGIC --- */
+        function setupVideoSequence(videoId, videoFiles) {
+            const videoElement = document.getElementById(videoId);
+            let currentIndex = 0;
+
+            function playNext() {
+                videoElement.src = videoFiles[currentIndex];
+                videoElement.play().catch(e => console.log("Auto-play prevented"));
+                
+                // Move to next video index, loop back to 0
+                currentIndex = (currentIndex + 1) % videoFiles.length;
+            }
+
+            // When current video ends, play next
+            videoElement.addEventListener('ended', playNext);
+
+            // Start loop
+            playNext();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Residential: Plays res_1.mp4 then res_2.mp4, then loops
+            setupVideoSequence('vid-res', ['v2.mp4', 'v3.mp4']);
+            
+            // 2. Industrial: Plays ind_1.mp4 then ind_2.mp4, then loops
+            setupVideoSequence('vid-ind', ['v1.mp4']);
+            
+            // 3. Bus/Commercial: Single video loop (or add more if you have them)
+            setupVideoSequence('vid-bus', ['v4.mp4']);
+            
+            // 4. Commercial (New addition)
+            setupVideoSequence('vid-com', ['v5.mp4']);
+        });
+
+        /* 3D TILT EFFECT */
+        const cards = document.querySelectorAll('.viewer-card');
+        
+        cards.forEach(card => {
+            const videoBox = card.querySelector('.tilt-target');
+            
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const xRotation = -((y - rect.height/2) / 20); 
+                const yRotation = (x - rect.width/2) / 20;
+                
+                if(videoBox) {
+                    videoBox.style.transform = `rotateX(${xRotation}deg) rotateY(${yRotation}deg) scale(1.02)`;
+                }
+            });
+
+            card.addEventListener('mouseleave', () => {
+                if(videoBox) {
+                    videoBox.style.transform = 'rotateX(0) rotateY(0) scale(1)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

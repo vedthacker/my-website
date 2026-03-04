@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industrial Portfolio | K.M. Thacker & Associates</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --neon-cyan: #00FFFF;
+            --deep-bg: #050508;
+            --text-silver: #E0E0E0;
+            --glass-border: rgba(0, 255, 255, 0.18);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--deep-bg);
+            color: var(--text-silver);
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Rajdhani', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .highlight { color: var(--neon-cyan); }
+
+        .space-grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            background: radial-gradient(circle at center, #1b0a2e 0%, #000 100%);
+        }
+
+        .moving-grid {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background:
+                linear-gradient(transparent 90%, rgba(0, 255, 255, 0.08) 50%),
+                linear-gradient(90deg, transparent 90%, rgba(138, 43, 226, 0.1) 50%);
+            background-size: 100px 100px;
+            transform: rotateX(60deg);
+            animation: moveGrid 15s linear infinite;
+        }
+
+        @keyframes moveGrid {
+            0% { transform: rotateX(60deg) translateY(0); }
+            100% { transform: rotateX(60deg) translateY(100px); }
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(5, 5, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: 1px;
+            text-decoration: none;
+        }
+
+        .back-btn {
+            padding: 8px 20px;
+            border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            background: var(--neon-cyan);
+            color: black;
+            box-shadow: 0 0 15px var(--neon-cyan);
+        }
+
+        .page-header {
+            padding: 120px 5% 40px 5%;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 3.5rem;
+            color: white;
+            text-shadow: 0 0 20px rgba(0,255,255,0.3);
+            margin-bottom: 20px;
+        }
+
+        .page-desc {
+            max-width: 900px;
+            margin: 0 auto;
+            color: #aaa;
+            line-height: 1.7;
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            padding: 20px 40px;
+            border-radius: 10px;
+            text-align: center;
+            width: 220px;
+        }
+
+        .stat-num {
+            font-size: 2rem;
+            font-weight: 800;
+            color: white;
+            display: block;
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--neon-cyan);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .marquee-section {
+            width: 100%;
+            padding: 20px 0;
+            background: transparent;
+            border-top: 1px solid rgba(0,255,255,0.12);
+            border-bottom: 1px solid rgba(0,255,255,0.12);
+            overflow: hidden;
+            margin-top: 30px;
+        }
+
+        .marquee-content {
+            display: inline-block;
+            animation: scroll 35s linear infinite;
+            white-space: nowrap;
+        }
+
+        .client-logo-box {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 190px;
+            height: 92px;
+            margin: 0 18px;
+            border: 1px solid rgba(0,255,255,0.2);
+            border-radius: 6px;
+            background: rgba(0, 0, 0, 0.28);
+            padding: 6px;
+        }
+
+        .client-logo {
+            max-width: 120px;
+            max-height: 38px;
+            object-fit: contain;
+            margin-bottom: 5px;
+            background: #fff;
+            border-radius: 3px;
+            padding: 2px 4px;
+        }
+        .logo-fallback {
+            display: none;
+            font-size: 1.25rem;
+            color: var(--neon-cyan);
+            margin-bottom: 6px;
+        }
+
+        .client-name {
+            color: white;
+            font-weight: 700;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .content-section {
+            padding: 60px 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 1.9rem;
+            margin-bottom: 22px;
+            border-left: 4px solid var(--neon-cyan);
+            padding-left: 15px;
+            color: white;
+        }
+
+        .section-copy {
+            color: #c3c3c3;
+            line-height: 1.8;
+            margin-bottom: 28px;
+            max-width: 1050px;
+        }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 22px;
+        }
+
+        .service-card {
+            background: rgba(20, 20, 30, 0.85);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: 0.25s ease;
+        }
+
+        .service-card:hover {
+            border-color: var(--neon-cyan);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(0,255,255,0.08);
+        }
+
+        .service-card img {
+            width: 100%;
+            height: 185px;
+            object-fit: cover;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .service-body {
+            padding: 18px;
+        }
+
+        .service-body h3 {
+            color: #fff;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .service-body p {
+            color: #cbcbcb;
+            font-size: 0.9rem;
+            line-height: 1.65;
+        }
+
+        .why-us {
+            margin-top: 26px;
+            background: rgba(0, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 255, 0.22);
+            border-radius: 10px;
+            padding: 24px;
+        }
+
+        .why-us p {
+            color: #ececec;
+            line-height: 1.85;
+            font-size: 1rem;
+        }
+
+        footer {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding: 40px 5%;
+            text-align: center;
+            color: #666;
+            font-size: 0.8rem;
+            margin-top: 60px;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-wrap: wrap;
+                gap: 10px;
+                padding: 12px 4%;
+            }
+            .logo { font-size: 1rem; }
+            .back-btn { padding: 7px 12px; font-size: 0.62rem; }
+
+            .page-header {
+                padding: 110px 4% 28px;
+            }
+            .page-header h1 { font-size: 2.2rem; }
+            .page-desc { font-size: 0.92rem; }
+            .stats-row { gap: 14px; margin: 26px 0; }
+            .stat-card { width: 100%; max-width: 320px; padding: 16px 20px; }
+
+            .client-logo-box {
+                width: 150px;
+                height: 78px;
+                margin: 0 10px;
+            }
+            .client-logo { max-width: 96px; max-height: 30px; }
+            .client-name { font-size: 0.66rem; }
+
+            .content-section { padding: 44px 4%; }
+            .section-title { font-size: 1.55rem; }
+            .section-copy { font-size: 0.92rem; line-height: 1.7; }
+            .service-grid { grid-template-columns: 1fr; gap: 16px; }
+            .service-card img { height: 190px; }
+            .service-body { padding: 15px; }
+            .service-body h3 { font-size: 1rem; }
+            .service-body p { font-size: 0.86rem; }
+
+            .why-us { padding: 16px; }
+            .why-us p { font-size: 0.92rem; line-height: 1.72; }
+            footer { padding: 30px 4%; margin-top: 36px; }
+        }
+
+        @media (max-width: 480px) {
+            .logo { font-size: 0.9rem; }
+            .page-header h1 { font-size: 1.9rem; }
+            .service-card img { height: 168px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="space-grid-bg"><div class="moving-grid"></div></div>
+
+    <nav>
+        <a href="index.html?skipIntro=1" class="logo"><span>KM THACKER</span> & ASSOCIATES</a>
+        <a href="index.html?skipIntro=1" class="back-btn"><i class="fas fa-arrow-left"></i> Home</a>
+    </nav>
+
+    <header class="page-header">
+        <h1>INDUSTRIAL <span class="highlight">INFRASTRUCTURE</span></h1>
+        <p class="page-desc">
+            Engineering-led design and structural consultancy for heavy industries, logistics and process plants. We combine technical precision, compliance-oriented planning and practical execution support across industrial projects.
+        </p>
+
+        <div class="stats-row">
+            <div class="stat-card">
+                <span class="stat-num">15+</span>
+                <span class="stat-label">Years Experience</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-num">1,000+</span>
+                <span class="stat-label">Industrial Projects</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-num">ISO</span>
+                <span class="stat-label">9001:2015 Certified</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="marquee-section">
+        <div class="marquee-content">
+            <div class="client-logo-box"><img src="https://logo.clearbit.com/jmbaxi.com" class="client-logo" alt="J M Baxi logo" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><i class="fas fa-anchor logo-fallback"></i><span class="client-name">J M BAXI</span></div>
+            <div class="client-logo-box"><img src="https://logo.clearbit.com/friendsgroupindia.com" class="client-logo" alt="Friends Impex logo" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><i class="fas fa-truck logo-fallback"></i><span class="client-name">FRIENDS IMPEX</span></div>
+            <div class="client-logo-box"><img src="https://logo.clearbit.com/modernsalt.in" class="client-logo" alt="Modern Salt logo" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><i class="fas fa-industry logo-fallback"></i><span class="client-name">MODERN SALT</span></div>
+            <div class="client-logo-box"><img src="https://logo.clearbit.com/punjabriceland.com" class="client-logo" alt="Punjab Rice logo" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><i class="fas fa-seedling logo-fallback"></i><span class="client-name">PUNJAB RICE</span></div>
+            <div class="client-logo-box"><img src="https://logo.clearbit.com/shreeyampower.com" class="client-logo" alt="Shreeyam Power logo" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><i class="fas fa-bolt logo-fallback"></i><span class="client-name">SHREEYAM POWER</span></div>
+            <div class="client-logo-box"><img src="https://logo.clearbit.com/rishishipping.com" class="client-logo" alt="Rishi Shipping logo" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><i class="fas fa-ship logo-fallback"></i><span class="client-name">RISHI SHIPPING</span></div>
+            <div class="client-logo-box"><img src="https://logo.clearbit.com/midindia.com" class="client-logo" alt="Mid India logo" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><i class="fas fa-industry logo-fallback"></i><span class="client-name">MID INDIA</span></div>
+            <div class="client-logo-box"><img src="https://logo.clearbit.com/jmbaxi.com" class="client-logo" alt="J M Baxi logo" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><i class="fas fa-anchor logo-fallback"></i><span class="client-name">J M BAXI</span></div>
+            <div class="client-logo-box"><img src="https://logo.clearbit.com/friendsgroupindia.com" class="client-logo" alt="Friends Impex logo" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><i class="fas fa-truck logo-fallback"></i><span class="client-name">FRIENDS IMPEX</span></div>
+            <div class="client-logo-box"><img src="https://logo.clearbit.com/modernsalt.in" class="client-logo" alt="Modern Salt logo" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><i class="fas fa-industry logo-fallback"></i><span class="client-name">MODERN SALT</span></div>
+            <div class="client-logo-box"><img src="https://logo.clearbit.com/punjabriceland.com" class="client-logo" alt="Punjab Rice logo" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><i class="fas fa-seedling logo-fallback"></i><span class="client-name">PUNJAB RICE</span></div>
+            <div class="client-logo-box"><img src="https://logo.clearbit.com/shreeyampower.com" class="client-logo" alt="Shreeyam Power logo" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><i class="fas fa-bolt logo-fallback"></i><span class="client-name">SHREEYAM POWER</span></div>
+            <div class="client-logo-box"><img src="https://logo.clearbit.com/rishishipping.com" class="client-logo" alt="Rishi Shipping logo" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><i class="fas fa-ship logo-fallback"></i><span class="client-name">RISHI SHIPPING</span></div>
+            <div class="client-logo-box"><img src="https://logo.clearbit.com/midindia.com" class="client-logo" alt="Mid India logo" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><i class="fas fa-industry logo-fallback"></i><span class="client-name">MID INDIA</span></div>
+        </div>
+    </div>
+
+    <section class="content-section">
+        <h2 class="section-title">INDUSTRIAL EXPERTISE AREAS</h2>
+        <p class="section-copy">
+            Our industrial design scope covers complete structural planning, layout intelligence, process-integration readiness and execution support. Each typology is approached with practical constructability, safety and long-term operational performance in mind.
+        </p>
+
+        <div class="service-grid">
+            <article class="service-card">
+                <img src="image1.png" alt="Godown and warehouse structure" loading="lazy">
+                <div class="service-body">
+                    <h3>Godown & Warehouse</h3>
+                    <p>Large-span warehousing designed for optimized movement, high storage efficiency and durable structural performance under industrial loading conditions.</p>
+                </div>
+            </article>
+
+            <article class="service-card">
+                <img src="image2.png" alt="Rice sortex processing plant" loading="lazy">
+                <div class="service-body">
+                    <h3>Rice Sortex Plants</h3>
+                    <p>Purpose-built layouts for rice processing lines with zoning for intake, cleaning, grading, sorting, packing and smooth logistics flow.</p>
+                </div>
+            </article>
+
+            <article class="service-card">
+                <img src="image3.png" alt="Industrial logistics plant" loading="lazy">
+                <div class="service-body">
+                    <h3>Logistic Plants</h3>
+                    <p>Integrated transport and dispatch infrastructure for cargo handling, vehicle movement, operational turnaround and scalable throughput.</p>
+                </div>
+            </article>
+
+            <article class="service-card">
+                <img src="image4.jpeg" alt="Oil refinery and processing unit" loading="lazy">
+                <div class="service-body">
+                    <h3>Oil Refineries</h3>
+                    <p>Structural solutions for edible oil and process industries with engineering attention to utility routing, safety clearance and workflow reliability.</p>
+                </div>
+            </article>
+
+            <article class="service-card">
+                <img src="image5.png" alt="Bromine chemical plant infrastructure" loading="lazy">
+                <div class="service-body">
+                    <h3>Bromine Plants</h3>
+                    <p>Chemical-industry compatible design with corrosion-aware detailing, segregated process zones and compliance-oriented planning logic.</p>
+                </div>
+            </article>
+
+            <article class="service-card">
+                <img src="image6.jpeg" alt="Lentil pulse mill facility" loading="lazy">
+                <div class="service-body">
+                    <h3>Lentil Pulse Mills</h3>
+                    <p>Food-processing facility design that supports hygienic workflows, efficient machinery placement and practical maintenance access.</p>
+                </div>
+            </article>
+
+            <article class="service-card">
+                <img src="image7.png" alt="Steel plant structure" loading="lazy">
+                <div class="service-body">
+                    <h3>Steel Plants</h3>
+                    <p>Heavy-duty structural systems engineered for dynamic loads, industrial vibration behavior and long operational life cycles.</p>
+                </div>
+            </article>
+
+            <article class="service-card">
+                <img src="image8.png" alt="Plywood manufacturing industry" loading="lazy">
+                <div class="service-body">
+                    <h3>Plywood Industries</h3>
+                    <p>Manufacturing-focused infrastructure covering production bays, utility integration and practical circulation for continuous output.</p>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2 class="section-title">WHY CHOOSE US</h2>
+        <div class="why-us">
+            <p>
+                KM Thacker & Associates is trusted by industrial clients for practical engineering thinking, responsive execution support and dependable delivery quality. Our team has handled complex industrial assignments across warehousing, processing, manufacturing and infrastructure projects with a strong focus on safety, code-compliance and long-term operational performance.
+            </p>
+        </div>
+    </section>
+
+    <footer>
+        &copy; 2026 KM Thacker & Associates. All Rights Reserved.
+    </footer>
+</body>
+</html>

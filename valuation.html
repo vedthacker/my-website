@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valuation Portfolio | K.M. Thacker & Associates</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        /* --- VALUATION THEME: GOLD & BLACK --- */
+        :root {
+            --neon-cyan: #FFD700; /* CHANGED TO GOLD */
+            --royal-purple: #1a0b00; /* Deep Brown/Black */
+            --deep-bg: #050508;
+            --text-silver: #E0E0E0;
+            --glass-panel: rgba(30, 25, 10, 0.95);
+            --glass-border: rgba(255, 215, 0, 0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: var(--deep-bg);
+            color: var(--text-silver);
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 { font-family: 'Rajdhani', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
+        .gold { color: #FFD700; }
+
+        /* --- BACKGROUND --- */
+        .space-grid-bg {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1; overflow: hidden;
+            background: radial-gradient(circle at center, #1a0b00 0%, #000 100%);
+        }
+        .moving-grid {
+            position: absolute; width: 200%; height: 200%; top: -50%; left: -50%;
+            background: 
+                linear-gradient(transparent 90%, rgba(255, 215, 0, 0.05) 50%),
+                linear-gradient(90deg, transparent 90%, rgba(255, 215, 0, 0.05) 50%);
+            background-size: 100px 100px;
+            transform: rotateX(60deg);
+            animation: moveGrid 15s linear infinite;
+        }
+        @keyframes moveGrid {
+            0% { transform: rotateX(60deg) translateY(0); }
+            100% { transform: rotateX(60deg) translateY(100px); }
+        }
+
+        /* --- NAV --- */
+        nav {
+            position: fixed; top: 0; width: 100%; padding: 15px 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 1000; background: rgba(10, 5, 0, 0.95);
+            backdrop-filter: blur(10px); border-bottom: 1px solid var(--glass-border);
+        }
+        .logo { font-size: 1.2rem; font-weight: 800; color: white; letter-spacing: 1px; text-decoration: none; }
+        .back-btn { 
+            padding: 8px 20px; border: 1px solid var(--neon-cyan); color: var(--neon-cyan); 
+            font-weight: 700; text-transform: uppercase; font-size: 0.7rem; text-decoration: none; 
+            transition: 0.3s;
+        }
+        .back-btn:hover { background: var(--neon-cyan); color: black; box-shadow: 0 0 15px var(--neon-cyan); }
+
+        /* --- HEADER --- */
+        .page-header { padding: 120px 5% 40px 5%; text-align: center; }
+        .page-header h1 { font-size: 3.5rem; color: white; text-shadow: 0 0 20px rgba(255,215,0,0.3); margin-bottom: 20px; }
+        .page-desc { max-width: 800px; margin: 0 auto; color: #aaa; line-height: 1.6; }
+
+        /* --- VALUATION STATS --- */
+        .stats-row { display: flex; justify-content: center; gap: 30px; margin: 40px 0; flex-wrap: wrap; }
+        .stat-card {
+            background: rgba(255,215,0,0.05); border: 1px solid var(--glass-border);
+            padding: 20px 40px; border-radius: 10px; text-align: center; width: 200px;
+        }
+        .stat-num { font-size: 2rem; font-weight: 800; color: white; display: block; font-family: 'Rajdhani'; }
+        .stat-label { font-size: 0.8rem; color: var(--neon-cyan); letter-spacing: 1px; text-transform: uppercase; }
+
+        /* --- BANK TABLE --- */
+        .content-section { padding: 60px 5%; max-width: 1400px; margin: 0 auto; }
+        .section-title { font-size: 1.8rem; margin-bottom: 30px; border-left: 4px solid var(--neon-cyan); padding-left: 15px; color: white; }
+
+        .holo-table-container {
+            overflow-x: auto;
+            background: rgba(20, 10, 0, 0.4); border: 1px solid var(--glass-border);
+            border-radius: 10px; padding: 20px;
+        }
+        .holo-table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        .holo-table th { 
+            text-align: left; padding: 15px; color: var(--neon-cyan); 
+            border-bottom: 1px solid var(--glass-border); text-transform: uppercase; font-size: 0.8rem; 
+        }
+        .holo-table td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); color: #ccc; font-size: 0.9rem; }
+        .holo-table tr:hover td { background: rgba(255, 215, 0, 0.05); color: white; }
+
+        /* --- PHOTO GRID --- */
+        .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .pf-card { height: 250px; position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+        .pf-card img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; opacity: 0.8; }
+        .pf-card:hover img { transform: scale(1.1); opacity: 1; }
+        .pf-card:hover { border-color: var(--neon-cyan); }
+
+        .section-copy {
+            color: #bfbfbf;
+            line-height: 1.8;
+            margin-bottom: 25px;
+            max-width: 1000px;
+        }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .service-card {
+            background: rgba(20, 10, 0, 0.4);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .service-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .service-body {
+            padding: 18px;
+        }
+
+        .service-body h3 {
+            color: #fff;
+            font-size: 1.15rem;
+            margin-bottom: 10px;
+        }
+
+        .service-body p {
+            color: #c9c9c9;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .service-body ul {
+            margin-left: 18px;
+            color: #d4d4d4;
+            font-size: 0.88rem;
+            line-height: 1.7;
+        }
+
+        .framework-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+        }
+
+        .framework-card {
+            background: rgba(255, 215, 0, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .framework-card h4 {
+            color: #fff;
+            margin-bottom: 8px;
+            font-family: 'Rajdhani', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .framework-card p {
+            color: #cbcbcb;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .why-us {
+            background: rgba(255, 215, 0, 0.06);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
+            padding: 24px;
+        }
+
+        .why-us p {
+            color: #f0f0f0;
+            line-height: 1.9;
+            font-size: 1rem;
+        }
+
+        /* --- MARQUEE (REUSED) --- */
+        .marquee-section {
+            width: 100%; padding: 20px 0; background: transparent;
+            border-top: 1px solid rgba(255,215,0,0.1); border-bottom: 1px solid rgba(255,215,0,0.1);
+            overflow: hidden; margin-top: 60px;
+        }
+        .marquee-content { display: inline-block; animation: scroll 35s linear infinite; white-space: nowrap; }
+        .client-logo-box {
+            display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
+            width: 180px; height: 84px; margin: 0 20px;
+            border: 1px solid rgba(255,215,0,0.2); border-radius: 5px; padding: 5px;
+            background: rgba(20, 10, 0, 0.25);
+        }
+        .client-logo {
+            max-width: 112px;
+            max-height: 34px;
+            object-fit: contain;
+            margin-bottom: 4px;
+            background: #fff;
+            border-radius: 3px;
+            padding: 2px 4px;
+            display: block;
+        }
+        .logo-fallback {
+            display: none;
+            font-size: 1.3rem;
+            color: var(--neon-cyan);
+            margin-bottom: 4px;
+        }
+        .client-name { color: var(--neon-cyan); font-weight: 700; font-family: 'Rajdhani'; font-size: 0.75rem; }
+        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        footer { border-top: 1px solid rgba(255,255,255,0.1); padding: 40px 5%; text-align: center; color: #666; font-size: 0.8rem; margin-top: 60px; }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-wrap: wrap;
+                gap: 10px;
+                padding: 12px 4%;
+            }
+            .logo { font-size: 1rem; }
+            .back-btn { padding: 7px 12px; font-size: 0.62rem; }
+
+            .page-header {
+                padding: 110px 4% 28px;
+            }
+            .page-header h1 { font-size: 2.2rem; }
+            .page-desc { font-size: 0.92rem; }
+            .stats-row { gap: 14px; margin: 26px 0; }
+            .stat-card { width: 100%; max-width: 320px; padding: 16px 20px; }
+
+            .marquee-section { margin-top: 34px; }
+            .client-logo-box {
+                width: 148px;
+                height: 76px;
+                margin: 0 10px;
+            }
+            .client-logo { max-width: 94px; max-height: 28px; }
+            .client-name { font-size: 0.65rem; }
+
+            .content-section { padding: 44px 4%; }
+            .section-title { font-size: 1.5rem; }
+            .section-copy { font-size: 0.92rem; line-height: 1.72; }
+            .holo-table-container { padding: 10px; }
+            .holo-table { min-width: 520px; }
+            .holo-table th, .holo-table td { padding: 11px 10px; font-size: 0.82rem; }
+
+            .portfolio-grid, .service-grid, .framework-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .pf-card { height: 200px; }
+            .service-card img { height: 170px; }
+            .service-body { padding: 15px; }
+            .service-body h3 { font-size: 1rem; }
+            .service-body p, .framework-card p, .service-body ul { font-size: 0.86rem; }
+            .why-us { padding: 16px; }
+            .why-us p { font-size: 0.92rem; line-height: 1.75; }
+            footer { padding: 30px 4%; margin-top: 36px; }
+        }
+
+        @media (max-width: 480px) {
+            .logo { font-size: 0.9rem; }
+            .page-header h1 { font-size: 1.9rem; }
+            .holo-table { min-width: 460px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="space-grid-bg"><div class="moving-grid"></div></div>
+
+    <nav>
+        <a href="index.html?skipIntro=1" class="logo"><span>KM THACKER</span> & ASSOCIATES</a>
+        <a href="index.html?skipIntro=1" class="back-btn"><i class="fas fa-arrow-left"></i> Home</a>
+    </nav>
+
+    <header class="page-header">
+        <h1>ASSET <span class="gold">VALUATION</span></h1>
+        <p class="page-desc">
+            Trust, Integrity, and Precision. We are Government Approved Valuers providing comprehensive valuation services for Real Estate and Plant & Machinery assets across India.
+        </p>
+
+        <div class="stats-row">
+            <div class="stat-card">
+                <span class="stat-num">20+</span>
+                <span class="stat-label">Empanelled Banks</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-num">GOVT.</span>
+                <span class="stat-label">Registered Valuers</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-num">10,000+</span>
+                <span class="stat-label">Valuations Delivered</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="marquee-section">
+        <div class="marquee-content">
+            <div class="client-logo-box"><img src="https://logo.clearbit.com/onlinesbi.sbi" class="client-logo" alt="SBI logo" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><i class="fas fa-building-columns logo-fallback"></i><span class="client-name">SBI</span></div>
+            <div class="client-logo-box"><img src="https://logo.clearbit.com/hdfcbank.com" class="client-logo" alt="HDFC logo" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><i class="fas fa-building-columns logo-fallback"></i><span class="client-name">HDFC</span></div>
+            <div class="client-logo-box"><img src="https://logo.clearbit.com/punjabandsindbank.co.in" class="client-logo" alt="Punjab and Sind Bank logo" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><i class="fas fa-building-columns logo-fallback"></i><span class="client-name">PUNJAB & SINDH</span></div>
+            <div class="client-logo-box"><img src="https://logo.clearbit.com/kotak.com" class="client-logo" alt="Kotak logo" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><i class="fas fa-building-columns logo-fallback"></i><span class="client-name">KOTAK</span></div>
+            <div class="client-logo-box"><img src="https://logo.clearbit.com/axisbank.com" class="client-logo" alt="Axis Bank logo" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><i class="fas fa-building-columns logo-fallback"></i><span class="client-name">AXIS</span></div>
+            <div class="client-logo-box"><img src="https://logo.clearbit.com/kvb.co.in" class="client-logo" alt="Karur Vysya logo" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><i class="fas fa-building-columns logo-fallback"></i><span class="client-name">KARUR VYSYA</span></div>
+            <div class="client-logo-box"><img src="https://logo.clearbit.com/bandhanbank.com" class="client-logo" alt="Bandhan Bank logo" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><i class="fas fa-building-columns logo-fallback"></i><span class="client-name">BANDHAN</span></div>
+            <div class="client-logo-box"><img src="https://logo.clearbit.com/canarabank.com" class="client-logo" alt="Canara Bank logo" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><i class="fas fa-building-columns logo-fallback"></i><span class="client-name">CANARA</span></div>
+            <div class="client-logo-box"><img src="https://logo.clearbit.com/gmcbank.in" class="client-logo" alt="GMCB logo" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><i class="fas fa-building-columns logo-fallback"></i><span class="client-name">GMCB</span></div>
+            <div class="client-logo-box"><img src="https://logo.clearbit.com/onlinesbi.sbi" class="client-logo" alt="SBI logo" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><i class="fas fa-building-columns logo-fallback"></i><span class="client-name">SBI</span></div>
+        </div>
+    </div>
+
+    <section class="content-section">
+        <h2 class="section-title">CORE VALUATION SERVICES</h2>
+        <p class="section-copy">
+            We deliver independent, defensible and audit-ready valuation reports aligned to widely accepted professional practices used by leading valuation firms. Our assignments support lending, financial reporting, transaction advisory, restructuring, insurance and regulatory compliance requirements.
+        </p>
+        <div class="service-grid">
+            <article class="service-card">
+                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80" alt="Real estate valuation and commercial buildings" loading="lazy">
+                <div class="service-body">
+                    <h3>Real Estate Valuation</h3>
+                    <p>
+                        End-to-end valuation of land, residential, commercial and industrial properties with clear market evidence, highest and best use analysis, and asset-level risk commentary.
+                    </p>
+                    <ul>
+                        <li>Secured lending and mortgage support</li>
+                        <li>Financial reporting and fair value requirements</li>
+                        <li>Acquisition, sale, lease and portfolio decisions</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="service-card">
+                <img src="https://images.unsplash.com/photo-1565043589221-1a6fd9ae45c7?auto=format&fit=crop&w=1200&q=80" alt="Plant and machinery valuation in an industrial environment" loading="lazy">
+                <div class="service-body">
+                    <h3>Plant & Machinery Valuation</h3>
+                    <p>
+                        Technical and financial valuation of machinery, process lines, utilities and specialized industrial assets considering condition, remaining useful life and replacement economics.
+                    </p>
+                    <ul>
+                        <li>Term lending, consortium banking and refinancing</li>
+                        <li>Insurance adequacy and reinstatement value</li>
+                        <li>Distress, liquidation and restructuring scenarios</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="service-card">
+                <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1200&q=80" alt="Government and statutory valuation documentation" loading="lazy">
+                <div class="service-body">
+                    <h3>Government & Statutory Valuation</h3>
+                    <p>
+                        Professional valuations prepared for public institutions, government-linked assignments and statutory use-cases where transparency, methodology clarity and documentation standards are critical.
+                    </p>
+                    <ul>
+                        <li>Government panel and institutional assignments</li>
+                        <li>Compliance-oriented reporting for scrutiny</li>
+                        <li>Clear assumptions, scope and limitation notes</li>
+                    </ul>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2 class="section-title">VALUATION FRAMEWORK</h2>
+        <p class="section-copy">
+            Depending on asset class and purpose, our reports apply one or a combination of the Market Approach, Income Approach and Cost Approach. Each report includes scope, assumptions, data references, site observations and reconciliation logic so stakeholders can review the valuation with confidence.
+        </p>
+        <div class="framework-grid">
+            <div class="framework-card">
+                <h4>Market Approach</h4>
+                <p>Comparable evidence, market adjustments and transaction benchmarking for credible market-linked conclusions.</p>
+            </div>
+            <div class="framework-card">
+                <h4>Income Approach</h4>
+                <p>Income capitalization or discounted cash flow methods for income-generating properties and business-linked assets.</p>
+            </div>
+            <div class="framework-card">
+                <h4>Cost Approach</h4>
+                <p>Replacement/reproduction cost less depreciation for specialized assets and engineering-intensive plant and machinery.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2 class="section-title">WHY CHOOSE US</h2>
+        <div class="why-us">
+            <p>
+                With over 30 years of professional experience and 10,000+ valuations completed across private and government assignments, KM Thacker & Associates is trusted for consistency, technical depth and fast turnaround. Our team combines engineering understanding with valuation discipline to deliver practical, defendable and decision-ready reports for banks, institutions, corporates and public bodies.
+            </p>
+        </div>
+    </section>
+
+    <footer>
+        &copy; 2026 KM Thacker & Associates. All Rights Reserved.
+    </footer>
+</body>
+</html>
